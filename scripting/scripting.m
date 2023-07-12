@@ -16,21 +16,20 @@
 clear all; close all;
 
 % Load eeglab
-[ALLEEG EEG CURRENTSET ALLCOM] = eeglab; 
+%[ALLEEG EEG CURRENTSET ALLCOM] = eeglab; 
 % Load *.edf data using the function pop_biosig
-[EEG, command] = pop_biosig('data_sub1_EOEC.edf', 'channels', [1:10 13:18 20:22]); 
+%[EEG, command] = pop_biosig('data_sub1_EOEC.edf', 'channels', [1:10 13:18 20:22]); 
 
 % Load the channel location file elettrodes_10_20_SEI.sfp, enabling 
 % automatic detection of channel file format
-% EEG.chanlocs = pop_chanedit(EEG.chanlocs, 'load',{'elettrodes_10_20_SEI.sfp', 'filetype', 'autodetect'}); 
-EEG.chanlocs = pop_chanedit(EEG.chanlocs, 'load',{'Standard-10-20-Cap19.locs', 'filetype', 'autodetect'}); 
+%EEG.chanlocs = pop_chanedit(EEG.chanlocs, 'load',{'elettrodes_10_20_SEI.sfp', 'filetype', 'autodetect'}); 
 % Store the dataset into EEGLAB (create a new ALLEEG dataset 1)
-[ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG); 
+%[ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG); 
 
 % OPPURE CARICO IL .SET se ci sono problemi di incompatibilità
-%[ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
-%EEG = pop_loadset('data_sub1_EOEC.set');
-%eeglab redraw 
+[ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
+EEG = pop_loadset('data_sub1_EOEC.set');
+eeglab redraw 
 %non serve usare il comando pop_newset se si usa il. set
 
 % Change the label of the events (use Type '2' for eyes closed (EC) and
@@ -103,7 +102,7 @@ eegplot(EEG.data,'srate',256,'eloc_file',EEG.chanlocs,'events',EEG.event,'winlen
 
 % Interpolate bad data channel(s) using the function pop_interp and
 % spherical method
-EEG = pop_interp(EEG, 13, 'spherical'); % T3
+EEG = pop_interp(EEG, [], 'spherical'); % T3
 % Create a new dataset with the name EEG_FIL_BAS_AVE_INT
 [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, CURRENTSET, 'setname', 'EEG_FIL_BAS_AVE_INT') ;
 
@@ -135,7 +134,7 @@ pop_topoplot(EEG, 0, [1:size(EEG.icawinv,2)] ,'EEG_FIL_BAS_AVE_INT_ICA',[4 5] ,0
 
 % Visually identify components reflecting eyeblinks, movements, heartbeat,
 % and other noises and then remove them using the function pop_subcomp
-EEG = pop_subcomp( EEG, [2 8], 0);  % example of bad components: 1
+EEG = pop_subcomp( EEG, 1, 0);  % example of bad components: 1
 % Visualize the ICs after removal
 pop_eegplot(EEG, 0, 0, 0); 
 

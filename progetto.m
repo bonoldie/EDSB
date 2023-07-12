@@ -67,7 +67,7 @@ close;
 % eegplot(ALLEEG(3).data - ALLEEG(2).data, 'srate', Fs, 'eloc_file', EEG.chanlocs, 'events', EEG.event, 'winlength',15);
 % close;
 
-%% Interpolate bad channels
+%% Interpolate corrupted channels(if any)
 EEG = pop_interp(EEG, []);
 
 [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, CURRENTSET, 'setname', 'BL_1_25_RR_INT');
@@ -92,11 +92,12 @@ close;
 
 %% ICA denosising
 % ICs: 
-%   3 -> eye blinks
-%   9 -> eye blinks (or 10 usually)
+%   3  -> eye blinks
+%   9  -> eye blinks (or 10 usually)
+%   12 -> heart beat (or 13 usually)
 % WARNING! This is not always the case, the decomposition may extract
 % components in a different order
-EEG = pop_subcomp( EEG, [3 9], 0); 
+EEG = pop_subcomp( EEG, [3 9 12], 0); 
 
 [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, CURRENTSET, 'setname', 'BL_1_25_RR_INT_ICA_DE');
 
@@ -126,9 +127,9 @@ eeglab redraw;
 %% Calculate PS - type 2(eyes closed) epochs
 figure; 
 title('Tipo 2 (occhi chiusi)'); 
-pop_spectopo(ALLEEG(7), 1, [0 1996], 'EEG' , 'percent', 100, 'freq', [6 11 22], 'freqrange',[2 25],'electrodes','on','maplimits', [-8 8]); 
+pop_spectopo(ALLEEG(7), 1, [0 2000], 'EEG' , 'percent', 100, 'freq', [6 11 22], 'freqrange',[2 25],'electrodes','on','maplimits', [-8 8]); 
 
 %% Calculate PS - type 4(eyes closed) epochs
 figure; 
 title('Tipo 4 (occhi aperti)'); 
-pop_spectopo(ALLEEG(8), 1, [0 1996], 'EEG' , 'percent', 100, 'freq', [6 11 22], 'freqrange',[2 25],'electrodes','on','maplimits', [-8 8]);
+pop_spectopo(ALLEEG(8), 1, [0 2000], 'EEG' , 'percent', 100, 'freq', [6 11 22], 'freqrange',[2 25],'electrodes','on','maplimits', [-8 8]);
