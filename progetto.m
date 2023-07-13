@@ -35,12 +35,10 @@ eegplot(EEG.data, 'srate', Fs, 'eloc_file', EEG.chanlocs, 'events', EEG.event, '
 
 close;
 %% (manual)Baseline removal
-for i=1:1:width(EEG.data)
-    EEG.data(:,i) = EEG.data(:,i) - mean(EEG.data(:,i));
+% EEG = pop_rmbase(EEG, [], []);
+for i=1:1:height(EEG.data)
+    EEG.data(i,:) = EEG.data(i,:) - mean(EEG.data(1,:));
 end
-
-eegplot(EEG.data, 'srate', Fs, 'eloc_file', EEG.chanlocs, 'events', EEG.event, 'winlength',15);
-close;
 
 %% Bandpass filter - HP@1Hz & LP@25Hz
 EEG = pop_eegfilt( EEG, 0, 25, [], [0], 0, 1, 'fir1', 0); % lowpass filter@25Hz
@@ -127,9 +125,9 @@ eeglab redraw;
 %% Calculate PS - type 2(eyes closed) epochs
 figure; 
 title('Tipo 2 (occhi chiusi)'); 
-pop_spectopo(ALLEEG(7), 1, [0 2000], 'EEG' , 'percent', 100, 'freq', [6 11 22], 'freqrange',[2 25],'electrodes','on','maplimits', [-8 8]); 
+pop_spectopo(ALLEEG(7), 1, [0 1992], 'EEG' , 'percent', 100, 'freq', [6 11 22], 'freqrange',[2 25],'electrodes','on','maplimits', [-8 8]); 
 
 %% Calculate PS - type 4(eyes closed) epochs
 figure; 
 title('Tipo 4 (occhi aperti)'); 
-pop_spectopo(ALLEEG(8), 1, [0 2000], 'EEG' , 'percent', 100, 'freq', [6 11 22], 'freqrange',[2 25],'electrodes','on','maplimits', [-8 8]);
+pop_spectopo(ALLEEG(8), 1, [0 1992], 'EEG' , 'percent', 100, 'freq', [6 11 22], 'freqrange',[2 25],'electrodes','on','maplimits', [-8 8]);
